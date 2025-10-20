@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProtoMEX: Asistente de Protocolo Clínico</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide-react@latest/dist/lucide-react.js"></script>
+    <script src="https://unpkg.com/lucide-icons@latest"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .phase-step {
+            transition: all 0.3s ease-in-out;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            line-height: 1.2;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .phase-link.active {
+            background-color: #2563eb;
+            color: white;
+            font-weight: 600;
+        }
+         .phase-link.completed {
+            background-color: #16a34a;
+            color: white;
+        }
+        .phase-link.locked {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .custom-alert {
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom checkbox */
+        .task-checkbox:checked + label .checkbox-icon {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        .task-checkbox:checked + label .checkbox-icon svg {
+            display: block;
+        }
+    </style>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="antialiased">
+
+    <div id="app" class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white shadow-md sticky top-0 z-10">
+            <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-check"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
+                    <h1 class="text-2xl font-bold text-gray-800">ProtoMEX</h1>
+                    <span class="text-sm text-gray-500 hidden md:block">Asistente de Protocolo Clínico</span>
+                </div>
+                 <div class="text-sm text-gray-600">
+                    <p><strong>Ubicación Contextual:</strong> México</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- Phases Navigation -->
+                <aside class="w-full lg:w-1/4">
+                    <div class="bg-white p-4 rounded-lg shadow-md sticky top-24">
+                        <h2 class="text-lg font-semibold mb-4 text-gray-700">Fases del Proyecto</h2>
+                        <nav id="phases-nav" class="space-y-2">
+                            <!-- Phase links will be dynamically inserted here -->
+                        </nav>
+                         <div class="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+                            <p>Complete todas las tareas de una fase para desbloquear la siguiente.</p>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Phase Content -->
+                <section id="phase-content" class="w-full lg:w-3/4">
+                    <!-- Phase steps will be dynamically inserted here -->
+                </section>
+
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="bg-white mt-8">
+            <div class="container mx-auto px-4 py-4 text-center text-sm text-gray-500">
+                <p>&copy; 2025 ProtoMEX. Prototipo por Netzahualpilli Delgado.</p>
+                <p class="mt-1">Esta es una herramienta de asistencia y no reemplaza la consultoría regulatoria profesional.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- DATA STRUCTURE ---
+        const appData = {
+            phases: [
+                { 
+                    id: 1, 
+                    title: "Conceptualización e Idoneidad", 
+                    steps: [
+                        { id: 1, title: "Definición de la Pregunta de Investigación (PICO)", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Formule su pregunta usando el formato Paciente, Intervención, Comparación, Resultado (PICO)." },
+                        { id: 2, title: "Revisión de Literatura y Brecha de Conocimiento", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Asegure que su estudio es necesario y aporta nuevo conocimiento." },
+                        { 
+                            id: 3, 
+                            title: "Checkpoint de Viabilidad Regulatoria", 
+                            source: "COFEPRIS", 
+                            completed: false, 
+                            type: 'radio', 
+                            options: ["Producto nuevo en México", "Nuevo uso para producto ya registrado", "Estudio sin producto nuevo (ej. observacional)"],
+                            alerts: {
+                                "Producto nuevo en México": "<strong>Alerta COFEPRIS:</strong> Requerirá un Sometimiento de 'Molécula Nueva' o 'Dispositivo Médico Clase III'. Esto implica requisitos de pre-clínica robustos y tiempos de revisión mayores.",
+                                "Nuevo uso para producto ya registrado": "<strong>Alerta COFEPRIS:</strong> Requerirá un Sometimiento de 'Nuevo Uso'. La carga de prueba es diferente a una molécula nueva, pero aún requiere evidencia sólida.",
+                                "Estudio sin producto nuevo (ej. observacional)": "<strong>Nota:</strong> Aunque no involucre un producto nuevo, debe ser sometido si es un ensayo clínico con intervención. Los estudios observacionales sin riesgo pueden tener un camino regulatorio más simple."
+                            },
+                            tooltip: "Identificar el tipo de producto impacta directamente la ruta regulatoria y los documentos necesarios."
+                        },
+                        { id: 4, title: "Formación del Equipo Principal", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Identifique al Investigador Principal (IP) y Co-Investigadores clave." },
+                        { id: 5, title: "Verificación de Credenciales y Sitio", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Asegúrese que el IP tiene experiencia en GCP y el sitio está registrado o es apto para el registro ante COFEPRIS." }
+                    ]
+                },
+                { 
+                    id: 2, 
+                    title: "Desarrollo del Protocolo", 
+                    steps: [
+                        { id: 1, title: "Diseño del Estudio (Fase, Aleatorización, Ciego)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Defina la metodología clave de su ensayo. Esto es fundamental para la validez científica." },
+                        { id: 2, title: "Definición de Objetivos y Variables (Endpoints)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Establezca claramente qué medirá para responder a su pregunta de investigación." },
+                        { id: 3, title: "Redacción de Criterios de Inclusión/Exclusión", source: "CONBIOÉTICA", completed: false, type: 'checkbox', tooltip: "Según CONBIOÉTICA, asegúrese de que los criterios no discriminen injustificadamente. Justifique científicamente cada exclusión (Art. 100, LGS)." },
+                        { 
+                            id: 4, 
+                            title: "Checklist de Consentimiento Informado", 
+                            source: "CONBIOÉTICA", 
+                            completed: false, 
+                            type: 'sub-checklist',
+                            tasks: [
+                                { id: 'ci-1', text: "Incluye justificación y objetivos del estudio.", done: false },
+                                { id: 'ci-2', text: "Describe procedimientos, riesgos y beneficios de forma clara.", done: false },
+                                { id: 'ci-3', text: "Garantiza confidencialidad (Ley de Protección de Datos).", done: false },
+                                { id: 'ci-4', text: "Explica compensación y tratamiento en caso de eventos adversos.", done: false },
+                                { id: 'ci-5', text: "Aclara la libertad de retirarse sin penalización.", done: false },
+                                { id: 'ci-6', text: "Proporciona datos de contacto del IP y del Comité de Ética.", done: false },
+                            ],
+                            tooltip: "Use esta lista para validar que su formato de Consentimiento Informado cumple con la NOM-012-SSA3-2012 y las guías de CONBIOÉTICA."
+                        },
+                        { id: 5, title: "Desarrollo del Plan de Análisis Estadístico", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Defina cómo analizará los datos antes de recolectarlos para evitar sesgos." },
+                        { id: 6, title: "Creación del Plan de Farmacovigilancia", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Describa cómo monitoreará, registrará y reportará los eventos adversos según la NOM-220-SSA1-2016." },
+                        { id: 7, title: "Obtención de Póliza de Seguro para el Ensayo", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "El Reglamento de la LGS en Materia de Investigación exige una póliza de seguro para cubrir posibles daños a los sujetos de investigación." }
+                    ]
+                },
+                { 
+                    id: 3, 
+                    title: "Sometimiento Ético (CEI)", 
+                    steps: [
+                        { id: 1, title: "Identificar Comités (CEI y CI) Registrados", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Seleccione un Comité de Ética en Investigación (CEI) y un Comité de Investigación (CI) con registro vigente ante COFEPRIS." },
+                        { id: 2, title: "Armado del Paquete de Sometimiento Ético", source: "Local", completed: false, type: 'checkbox', tooltip: "Compile todos los documentos requeridos por sus comités locales (Protocolo, Consentimiento, Manual del Investigador, CVs, etc.)." },
+                        { 
+                            id: 3, 
+                            title: "Seguimiento de Respuesta del CEI/CI", 
+                            source: "Local", 
+                            completed: false, 
+                            type: 'select',
+                            options: ["No enviado", "Enviado", "En Revisión", "Recibido con Comentarios", "Aprobado"],
+                            tooltip: "Mantenga un registro del estado de su sometimiento. Necesitará la carta de aprobación para continuar."
+                        },
+                        { id: 4, title: "Obtener Carta de Aprobación del CEI/CI", source: "Local", completed: false, type: 'checkbox', tooltip: "Este es el documento CRÍTICO para poder avanzar al sometimiento regulatorio ante COFEPRIS." }
+                    ]
+                },
+                { 
+                    id: 4, 
+                    title: "Sometimiento Regulatorio (COFEPRIS)", 
+                    steps: [
+                        { id: 1, title: "Identificar Homoclave del Trámite", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Basado en la Fase 1, identifique el trámite correcto, ej. 'COFEPRIS-04-016: Autorización de Protocolo de Investigación'." },
+                        { id: 2, title: "Realizar Pago de Derechos Correspondiente", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Genere y pague la hoja de ayuda para el pago de derechos del trámite seleccionado." },
+                        { id: 3, title: "Armado del Dossier Regulatorio Completo", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Compile el dossier según la guía de COFEPRIS: Formato, Pago, Protocolo, Cartas de Comités, Manual, etc." },
+                        { 
+                            id: 4, 
+                            title: "Sometimiento y Seguimiento en DIGIPRiS", 
+                            source: "COFEPRIS", 
+                            completed: false, 
+                            type: 'select',
+                            options: ["No enviado", "Sometido", "En Prevención", "Autorizado", "Rechazado"],
+                            tooltip: "Una vez sometido, esté atento a una posible 'Prevención' (solicitud de aclaraciones) por parte de COFEPRIS."
+                        },
+                        { id: 5, title: "Cargar Oficio de Autorización de COFEPRIS", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Este es el hito final de la fase de aprobación. ¡Felicidades!" }
+                    ]
+                },
+                { 
+                    id: 5, 
+                    title: "Inicio y Conducción", 
+                    steps: [
+                        { id: 1, title: "Realizar Visita de Inicio de Sitio (SIV)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Capacite a todo el personal del sitio sobre el protocolo y los procedimientos del estudio antes de incluir al primer paciente." },
+                        { id: 2, title: "Reporte Anual a Comités de Ética", source: "CONBIOÉTICA", completed: false, type: 'checkbox', tooltip: "Recuerde someter informes de seguimiento anuales a su CEI y CI." },
+                        { id: 3, title: "Proceso de Gestión de Enmiendas", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Cualquier cambio al protocolo debe ser aprobado por el CEI y luego notificado/autorizado por COFEPRIS antes de su implementación." },
+                        { id: 4, title: "Reporte de Eventos Adversos Serios (EAS)", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Reporte los EAS a COFEPRIS y al CEI dentro de los plazos establecidos en la NOM-220 (ej. 7 días para eventos que amenazan la vida)." },
+                        { id: 5, title: "Preparar Reporte Final del Estudio", source: "COFEPRIS/ICH", completed: false, type: 'checkbox', tooltip: "Al finalizar el ensayo, debe preparar un reporte final para someter al CEI y a COFEPRIS." }
+                    ]
+                },
+            ],
+            currentPhase: 1
+        };
+
+        // --- RENDER FUNCTIONS ---
+
+        function renderNavigation() {
+            const navContainer = document.getElementById('phases-nav');
+            navContainer.innerHTML = '';
+            appData.phases.forEach(phase => {
+                const isCompleted = isPhaseCompleted(phase.id);
+                const isActive = phase.id === appData.currentPhase;
+                const isLocked = !isCompleted && phase.id > 1 && !isPhaseCompleted(phase.id - 1);
+
+                let linkClass = 'w-full text-left p-3 rounded-md transition-colors duration-200 flex items-center justify-between';
+                let icon = '';
+
+                if (isActive) {
+                    linkClass += ' active';
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-circle"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="m12 16 4-4-4-4"/></svg>`;
+                } else if (isCompleted) {
+                    linkClass += ' completed';
+                     icon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>`;
+                } else if (isLocked) {
+                    linkClass += ' locked';
+                    icon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+                } else {
+                     linkClass += ' bg-gray-100 hover:bg-gray-200 text-gray-700';
+                }
+
+                const link = document.createElement('button');
+                link.className = linkClass;
+                link.dataset.phaseId = phase.id;
+                link.disabled = isLocked;
+                link.innerHTML = `
+                    <span>${phase.id}. ${phase.title}</span>
+                    ${icon}
+                `;
+                link.addEventListener('click', () => {
+                    appData.currentPhase = phase.id;
+                    render();
+                });
+                navContainer.appendChild(link);
+            });
+        }
+
+        function renderPhaseContent() {
+            const contentContainer = document.getElementById('phase-content');
+            contentContainer.innerHTML = '';
+            const phase = appData.phases.find(p => p.id === appData.currentPhase);
+            
+            const header = document.createElement('div');
+            header.className = 'mb-6';
+            header.innerHTML = `
+                <h2 class="text-3xl font-bold text-gray-800">Fase ${phase.id}: ${phase.title}</h2>
+                <p class="mt-1 text-gray-600">Siga los pasos para completar los requisitos de esta fase.</p>
+            `;
+            contentContainer.appendChild(header);
+
+            const stepsContainer = document.createElement('div');
+            stepsContainer.className = 'space-y-4';
+            phase.steps.forEach(step => {
+                const stepEl = document.createElement('div');
+                stepEl.className = 'phase-step bg-white p-5 rounded-lg shadow-sm border border-gray-200';
+                
+                let inputHtml = '';
+                switch(step.type) {
+                    case 'checkbox':
+                        inputHtml = `
+                            <div class="flex items-center">
+                                <input type="checkbox" id="step-${phase.id}-${step.id}" class="task-checkbox hidden" ${step.completed ? 'checked' : ''} data-phase-id="${phase.id}" data-step-id="${step.id}">
+                                <label for="step-${phase.id}-${step.id}" class="flex items-center cursor-pointer">
+                                    <span class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-sm flex items-center justify-center transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M20 6 9 17l-5-5"/></svg>
+                                    </span>
+                                    <span class="text-gray-800 font-medium">${step.title}</span>
+                                </label>
+                            </div>
+                        `;
+                        break;
+                    case 'radio':
+                        const radioOptions = step.options.map((opt, index) => `
+                            <div class="flex items-center">
+                                <input type="radio" id="step-${phase.id}-${step.id}-${index}" name="step-${phase.id}-${step.id}" value="${opt}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" data-phase-id="${phase.id}" data-step-id="${step.id}" ${step.value === opt ? 'checked' : ''}>
+                                <label for="step-${phase.id}-${step.id}-${index}" class="ml-2 text-sm font-medium text-gray-900">${opt}</label>
+                            </div>
+                        `).join('');
+                        inputHtml = `<div class="space-y-2 mt-2">${radioOptions}</div>`;
+                        break;
+                    case 'sub-checklist':
+                        const subTasks = step.tasks.map(task => `
+                            <li class="flex items-center">
+                                <input type="checkbox" id="subtask-${task.id}" class="task-checkbox hidden" ${task.done ? 'checked' : ''} data-phase-id="${phase.id}" data-step-id="${step.id}" data-subtask-id="${task.id}">
+                                <label for="subtask-${task.id}" class="flex items-center cursor-pointer text-sm w-full">
+                                    <span class="checkbox-icon w-5 h-5 mr-3 border-2 border-gray-300 rounded-sm flex items-center justify-center transition-colors flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M20 6 9 17l-5-5"/></svg>
+                                    </span>
+                                    <span class="text-gray-700">${task.text}</span>
+                                </label>
+                            </li>
+                        `).join('');
+                        inputHtml = `<h4 class="font-medium text-gray-800 mb-2">${step.title}</h4><ul class="space-y-2 pl-2">${subTasks}</ul>`;
+                        break;
+                    case 'select':
+                         const selectOptions = step.options.map(opt => `<option value="${opt}" ${step.value === opt ? 'selected' : ''}>${opt}</option>`).join('');
+                         inputHtml = `
+                            <div class="flex items-center">
+                                <span class="font-medium text-gray-800 mr-3">${step.title}</span>
+                                <select class="block w-full max-w-xs p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" data-phase-id="${phase.id}" data-step-id="${step.id}">
+                                    ${selectOptions}
+                                </select>
+                            </div>`;
+                        break;
+                }
+
+                stepEl.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            ${inputHtml}
+                            <div id="alert-container-${phase.id}-${step.id}" class="mt-3"></div>
+                        </div>
+                        <div class="flex items-center space-x-2 text-right">
+                           <span class="text-xs font-semibold px-2 py-1 rounded-full bg-gray-200 text-gray-700">${step.source}</span>
+                            <div class="tooltip">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info text-gray-400 hover:text-blue-600 cursor-pointer"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <span class="tooltiptext">${step.tooltip}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                stepsContainer.appendChild(stepEl);
+            });
+            contentContainer.appendChild(stepsContainer);
+
+            // Add completion button
+            if(isPhaseCompleted(phase.id) && phase.id < appData.phases.length){
+                const nextButton = document.createElement('button');
+                nextButton.className = 'mt-8 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2';
+                nextButton.innerHTML = `
+                    <span>Ir a la Fase ${phase.id + 1}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                `;
+                nextButton.onclick = () => {
+                    appData.currentPhase++;
+                    render();
+                    window.scrollTo(0, 0);
+                };
+                contentContainer.appendChild(nextButton);
+            } else {
+                 const progress = calculatePhaseProgress(phase.id);
+                 const progressBar = document.createElement('div');
+                 progressBar.className = 'mt-8 w-full bg-gray-200 rounded-full h-2.5';
+                 progressBar.innerHTML = `<div class="bg-blue-600 h-2.5 rounded-full" style="width: ${progress}%"></div>`;
+                 const progressText = document.createElement('p');
+                 progressText.className = 'text-center text-sm text-gray-600 mt-2';
+                 progressText.textContent = `Progreso de la fase: ${progress.toFixed(0)}%`;
+                 contentContainer.appendChild(progressBar);
+                 contentContainer.appendChild(progressText);
+            }
+        }
+
+        // --- LOGIC & EVENT HANDLERS ---
+        function handleInteraction(e) {
+            const target = e.target;
+            const phaseId = parseInt(target.dataset.phaseId);
+            const stepId = parseInt(target.dataset.stepId);
+            if (!phaseId || !stepId) return;
+
+            const phase = appData.phases.find(p => p.id === phaseId);
+            const step = phase.steps.find(s => s.id === stepId);
+            
+            switch (step.type) {
+                case 'checkbox':
+                    step.completed = target.checked;
+                    break;
+                case 'radio':
+                    step.value = target.value;
+                    step.completed = true;
+                    // Show alert for radio
+                    const alertContainer = document.getElementById(`alert-container-${phaseId}-${stepId}`);
+                    if (step.alerts && step.alerts[target.value]) {
+                        alertContainer.innerHTML = `<div class="custom-alert p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">${step.alerts[target.value]}</div>`;
+                    } else {
+                        alertContainer.innerHTML = '';
+                    }
+                    break;
+                case 'select':
+                     step.value = target.value;
+                     // Select is completed if not the first option
+                     step.completed = step.options.indexOf(step.value) > 0;
+                     break;
+                case 'sub-checklist':
+                    const subtaskId = target.dataset.subtaskId;
+                    if(subtaskId) {
+                       const subtask = step.tasks.find(t => t.id === subtaskId);
+                       subtask.done = target.checked;
+                       step.completed = step.tasks.every(t => t.done);
+                    }
+                    break;
+            }
+
+            // Check if phase is completed and unlock next one
+            if (isPhaseCompleted(phaseId) && phaseId < appData.phases.length) {
+                // This will trigger a re-render showing the 'next phase' button
+                render();
+            } else {
+                render(); // Re-render to update progress bar
+            }
+        }
+        
+        function isPhaseCompleted(phaseId) {
+            const phase = appData.phases.find(p => p.id === phaseId);
+            return phase.steps.every(step => step.completed);
+        }
+
+        function calculatePhaseProgress(phaseId) {
+            const phase = appData.phases.find(p => p.id === phaseId);
+            const completedSteps = phase.steps.filter(s => s.completed).length;
+            return (completedSteps / phase.steps.length) * 100;
+        }
+
+        function render() {
+            renderNavigation();
+            renderPhaseContent();
+            // Safely create icons after the content is on the page.
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        // --- INITIALIZATION ---
+        document.getElementById('phase-content').addEventListener('change', handleInteraction);
+        render();
+    });
+    </script>
+
+</body>
+</html>
+

@@ -126,7 +126,7 @@
         <!-- Footer -->
         <footer class="bg-white mt-8">
             <div class="container mx-auto px-4 py-4 text-center text-sm text-gray-500">
-                <p>&copy; 2025 ProtoMEX. Prototipo por Netzahualpilli Delgado.</p>
+                <p>&copy; 2025 ProtoMEX. Todos los derechos reservados.</p>
                 <p class="mt-1">Esta es una herramienta de asistencia y no reemplaza la consultoría regulatoria profesional.</p>
             </div>
         </footer>
@@ -142,8 +142,8 @@
                     id: 1, 
                     title: "Conceptualización e Idoneidad", 
                     steps: [
-                        { id: 1, title: "Definición de la Pregunta de Investigación (PICO)", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Formule su pregunta usando el formato Paciente, Intervención, Comparación, Resultado (PICO)." },
-                        { id: 2, title: "Revisión de Literatura y Brecha de Conocimiento", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Asegure que su estudio es necesario y aporta nuevo conocimiento." },
+                        { id: 1, title: "Definición de la Pregunta de Investigación (PICO)", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Formule su pregunta usando el formato Paciente, Intervención, Comparación, Resultado (PICO).", link: "https://processmap.tghn.org/steps/develop-research-question/" },
+                        { id: 2, title: "Revisión de Literatura y Brecha de Conocimiento", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Asegure que su estudio es necesario y aporta nuevo conocimiento.", link: "https://processmap.tghn.org/steps/literature-review/" },
                         { 
                             id: 3, 
                             title: "Checkpoint de Viabilidad Regulatoria", 
@@ -156,19 +156,20 @@
                                 "Nuevo uso para producto ya registrado": "<strong>Alerta COFEPRIS:</strong> Requerirá un Sometimiento de 'Nuevo Uso'. La carga de prueba es diferente a una molécula nueva, pero aún requiere evidencia sólida.",
                                 "Estudio sin producto nuevo (ej. observacional)": "<strong>Nota:</strong> Aunque no involucre un producto nuevo, debe ser sometido si es un ensayo clínico con intervención. Los estudios observacionales sin riesgo pueden tener un camino regulatorio más simple."
                             },
-                            tooltip: "Identificar el tipo de producto impacta directamente la ruta regulatoria y los documentos necesarios."
+                            tooltip: "Identificar el tipo de producto impacta directamente la ruta regulatoria y los documentos necesarios.",
+                            link: "https://www.gob.mx/cofepris/acciones-y-programas/ensayos-clinicos-protocolos-de-investigacion-en-seres-humanos"
                         },
-                        { id: 4, title: "Formación del Equipo Principal", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Identifique al Investigador Principal (IP) y Co-Investigadores clave." },
-                        { id: 5, title: "Verificación de Credenciales y Sitio", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Asegúrese que el IP tiene experiencia en GCP y el sitio está registrado o es apto para el registro ante COFEPRIS." }
+                        { id: 4, title: "Formación del Equipo Principal", source: "TGHN", completed: false, type: 'checkbox', tooltip: "Identifique al Investigador Principal (IP) y Co-Investigadores clave.", link: "https://processmap.tghn.org/steps/assemble-the-team/" },
+                        { id: 5, title: "Verificación de Credenciales y Sitio", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Asegúrese que el IP tiene experiencia en GCP y el sitio está registrado o es apto para el registro ante COFEPRIS.", link: "https://www.gob.mx/cofepris/acciones-y-programas/ensayos-clinicos-protocolos-de-investigacion-en-seres-humanos" }
                     ]
                 },
                 { 
                     id: 2, 
                     title: "Desarrollo del Protocolo", 
                     steps: [
-                        { id: 1, title: "Diseño del Estudio (Fase, Aleatorización, Ciego)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Defina la metodología clave de su ensayo. Esto es fundamental para la validez científica." },
-                        { id: 2, title: "Definición de Objetivos y Variables (Endpoints)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Establezca claramente qué medirá para responder a su pregunta de investigación." },
-                        { id: 3, title: "Redacción de Criterios de Inclusión/Exclusión", source: "CONBIOÉTICA", completed: false, type: 'checkbox', tooltip: "Según CONBIOÉTICA, asegúrese de que los criterios no discriminen injustificadamente. Justifique científicamente cada exclusión (Art. 100, LGS)." },
+                        { id: 1, title: "Diseño del Estudio (Fase, Aleatorización, Ciego)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Defina la metodología clave de su ensayo. Esto es fundamental para la validez científica.", link: "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e-6-r2-guideline-good-clinical-practice-step-5_en.pdf" },
+                        { id: 2, title: "Definición de Objetivos y Variables (Endpoints)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Establezca claramente qué medirá para responder a su pregunta de investigación.", link: "https://globalhealthtrials.tghn.org/articles/ich-good-clinical-practice/" },
+                        { id: 3, title: "Redacción de Criterios de Inclusión/Exclusión", source: "CONBIOÉTICA", completed: false, type: 'checkbox', tooltip: "Según CONBIOÉTICA, asegúrese de que los criterios no discriminen injustificadamente. Justifique científicamente cada exclusión (Art. 100, LGS).", link: "https://www.diputados.gob.mx/LeyesBiblio/pdf/LGS.pdf" },
                         { 
                             id: 4, 
                             title: "Checklist de Consentimiento Informado", 
@@ -183,18 +184,19 @@
                                 { id: 'ci-5', text: "Aclara la libertad de retirarse sin penalización.", done: false },
                                 { id: 'ci-6', text: "Proporciona datos de contacto del IP y del Comité de Ética.", done: false },
                             ],
-                            tooltip: "Use esta lista para validar que su formato de Consentimiento Informado cumple con la NOM-012-SSA3-2012 y las guías de CONBIOÉTICA."
+                            tooltip: "Use esta lista para validar que su formato de Consentimiento Informado cumple con la NOM-012-SSA3-2012 y las guías de CONBIOÉTICA.",
+                            link: "https://www.conbioetica-mexico.salud.gob.mx/interior/temasgeneral/consentimiento_informado.html"
                         },
-                        { id: 5, title: "Desarrollo del Plan de Análisis Estadístico", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Defina cómo analizará los datos antes de recolectarlos para evitar sesgos." },
-                        { id: 6, title: "Creación del Plan de Farmacovigilancia", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Describa cómo monitoreará, registrará y reportará los eventos adversos según la NOM-220-SSA1-2016." },
-                        { id: 7, title: "Obtención de Póliza de Seguro para el Ensayo", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "El Reglamento de la LGS en Materia de Investigación exige una póliza de seguro para cubrir posibles daños a los sujetos de investigación." }
+                        { id: 5, title: "Desarrollo del Plan de Análisis Estadístico", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Defina cómo analizará los datos antes de recolectarlos para evitar sesgos.", link: "https://processmap.tghn.org/steps/data-analysis/" },
+                        { id: 6, title: "Creación del Plan de Farmacovigilancia", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Describa cómo monitoreará, registrará y reportará los eventos adversos según la NOM-220-SSA1-2016.", link: "https://www.dof.gob.mx/normasOficiales/8356/salud14_C/salud14_C.html" },
+                        { id: 7, title: "Obtención de Póliza de Seguro para el Ensayo", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "El Reglamento de la LGS en Materia de Investigación exige una póliza de seguro para cubrir posibles daños a los sujetos de investigación.", link: "http://www.salud.gob.mx/unidades/cdi/legis/lgs/reglamento_investigacion.pdf" }
                     ]
                 },
                 { 
                     id: 3, 
                     title: "Sometimiento Ético (CEI)", 
                     steps: [
-                        { id: 1, title: "Identificar Comités (CEI y CI) Registrados", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Seleccione un Comité de Ética en Investigación (CEI) y un Comité de Investigación (CI) con registro vigente ante COFEPRIS." },
+                        { id: 1, title: "Identificar Comités (CEI y CI) Registrados", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Seleccione un Comité de Ética en Investigación (CEI) y un Comité de Investigación (CI) con registro vigente ante COFEPRIS.", link: "https://www.gob.mx/cofepris/documentos/comites-de-etica-en-investigacion-registrados-ante-cofepris" },
                         { id: 2, title: "Armado del Paquete de Sometimiento Ético", source: "Local", completed: false, type: 'checkbox', tooltip: "Compile todos los documentos requeridos por sus comités locales (Protocolo, Consentimiento, Manual del Investigador, CVs, etc.)." },
                         { 
                             id: 3, 
@@ -212,9 +214,9 @@
                     id: 4, 
                     title: "Sometimiento Regulatorio (COFEPRIS)", 
                     steps: [
-                        { id: 1, title: "Identificar Homoclave del Trámite", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Basado en la Fase 1, identifique el trámite correcto, ej. 'COFEPRIS-04-016: Autorización de Protocolo de Investigación'." },
-                        { id: 2, title: "Realizar Pago de Derechos Correspondiente", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Genere y pague la hoja de ayuda para el pago de derechos del trámite seleccionado." },
-                        { id: 3, title: "Armado del Dossier Regulatorio Completo", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Compile el dossier según la guía de COFEPRIS: Formato, Pago, Protocolo, Cartas de Comités, Manual, etc." },
+                        { id: 1, title: "Identificar Homoclave del Trámite", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Basado en la Fase 1, identifique el trámite correcto, ej. 'COFEPRIS-04-010: Solicitud de autorización de protocolo de investigación en seres humanos'.", link: "https://www.gob.mx/cofepris/acciones-y-programas/ensayos-clinicos-protocolos-de-investigacion-en-seres-humanos" },
+                        { id: 2, title: "Realizar Pago de Derechos Correspondiente", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Genere y pague la hoja de ayuda para el pago de derechos del trámite seleccionado.", link: "https://www.gob.mx/cofepris/acciones-y-programas/tramites-y-servicios" },
+                        { id: 3, title: "Armado del Dossier Regulatorio Completo", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Compile el dossier según la guía de COFEPRIS: Formato, Pago, Protocolo, Cartas de Comités, Manual, etc.", link: "https://www.gob.mx/cms/uploads/attachment/file/842247/Gu_a_para_la_solicitud_de_protocolos_04-010_DIGIPRIS_1.0.pdf" },
                         { 
                             id: 4, 
                             title: "Sometimiento y Seguimiento en DIGIPRiS", 
@@ -222,7 +224,8 @@
                             completed: false, 
                             type: 'select',
                             options: ["No enviado", "Sometido", "En Prevención", "Autorizado", "Rechazado"],
-                            tooltip: "Una vez sometido, esté atento a una posible 'Prevención' (solicitud de aclaraciones) por parte de COFEPRIS."
+                            tooltip: "Una vez sometido, esté atento a una posible 'Prevención' (solicitud de aclaraciones) por parte de COFEPRIS.",
+                            link: "https://www.gob.mx/cofepris/acciones-y-programas/digipris-plataforma-de-tramites-y-servicios-de-la-cofepris"
                         },
                         { id: 5, title: "Cargar Oficio de Autorización de COFEPRIS", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Este es el hito final de la fase de aprobación. ¡Felicidades!" }
                     ]
@@ -231,11 +234,11 @@
                     id: 5, 
                     title: "Inicio y Conducción", 
                     steps: [
-                        { id: 1, title: "Realizar Visita de Inicio de Sitio (SIV)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Capacite a todo el personal del sitio sobre el protocolo y los procedimientos del estudio antes de incluir al primer paciente." },
-                        { id: 2, title: "Reporte Anual a Comités de Ética", source: "CONBIOÉTICA", completed: false, type: 'checkbox', tooltip: "Recuerde someter informes de seguimiento anuales a su CEI y CI." },
-                        { id: 3, title: "Proceso de Gestión de Enmiendas", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Cualquier cambio al protocolo debe ser aprobado por el CEI y luego notificado/autorizado por COFEPRIS antes de su implementación." },
-                        { id: 4, title: "Reporte de Eventos Adversos Serios (EAS)", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Reporte los EAS a COFEPRIS y al CEI dentro de los plazos establecidos en la NOM-220 (ej. 7 días para eventos que amenazan la vida)." },
-                        { id: 5, title: "Preparar Reporte Final del Estudio", source: "COFEPRIS/ICH", completed: false, type: 'checkbox', tooltip: "Al finalizar el ensayo, debe preparar un reporte final para someter al CEI y a COFEPRIS." }
+                        { id: 1, title: "Realizar Visita de Inicio de Sitio (SIV)", source: "TGHN/ICH", completed: false, type: 'checkbox', tooltip: "Capacite a todo el personal del sitio sobre el protocolo y los procedimientos del estudio antes de incluir al primer paciente.", link: "https://processmap.tghn.org/steps/site-initiation/" },
+                        { id: 2, title: "Reporte Anual a Comités de Ética", source: "CONBIOÉTICA", completed: false, type: 'checkbox', tooltip: "Recuerde someter informes de seguimiento anuales a su CEI y CI.", link: "https://www.dof.gob.mx/nota_detalle.php?codigo=5284323&fecha=31/12/2012#gsc.tab=0" },
+                        { id: 3, title: "Proceso de Gestión de Enmiendas", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Cualquier cambio al protocolo debe ser aprobado por el CEI y luego notificado/autorizado por COFEPRIS antes de su implementación.", link: "https://www.gob.mx/cofepris/acciones-y-programas/ensayos-clinicos-protocolos-de-investigacion-en-seres-humanos" },
+                        { id: 4, title: "Reporte de Eventos Adversos Serios (EAS)", source: "COFEPRIS", completed: false, type: 'checkbox', tooltip: "Reporte los EAS a COFEPRIS y al CEI dentro de los plazos establecidos en la NOM-220 (ej. 7 días para eventos que amenazan la vida).", link: "https://www.dof.gob.mx/normasOficiales/8356/salud14_C/salud14_C.html" },
+                        { id: 5, title: "Preparar Reporte Final del Estudio", source: "COFEPRIS/ICH", completed: false, type: 'checkbox', tooltip: "Al finalizar el ensayo, debe preparar un reporte final para someter al CEI y a COFEPRIS.", link: "https://www.ema.europa.eu/en/documents/scientific-guideline/ich-e-3-structure-and-content-clinical-study-reports-step-5_en.pdf" }
                     ]
                 },
             ],
@@ -319,13 +322,13 @@
                         `;
                         break;
                     case 'radio':
-                        const radioOptions = step.options.map((opt, index) => `
+                         const radioOptions = step.options.map((opt, index) => `
                             <div class="flex items-center">
                                 <input type="radio" id="step-${phase.id}-${step.id}-${index}" name="step-${phase.id}-${step.id}" value="${opt}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" data-phase-id="${phase.id}" data-step-id="${step.id}" ${step.value === opt ? 'checked' : ''}>
                                 <label for="step-${phase.id}-${step.id}-${index}" class="ml-2 text-sm font-medium text-gray-900">${opt}</label>
                             </div>
                         `).join('');
-                        inputHtml = `<div class="space-y-2 mt-2">${radioOptions}</div>`;
+                        inputHtml = `<h4 class="font-medium text-gray-800">${step.title}</h4><div class="space-y-2 mt-2">${radioOptions}</div>`;
                         break;
                     case 'sub-checklist':
                         const subTasks = step.tasks.map(task => `
@@ -352,6 +355,12 @@
                             </div>`;
                         break;
                 }
+                
+                const linkIcon = step.link ? `
+                    <a href="${step.link}" target="_blank" rel="noopener noreferrer" class="ml-2 text-blue-500 hover:text-blue-700" title="Ver documentación oficial">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+                    </a>
+                ` : '';
 
                 stepEl.innerHTML = `
                     <div class="flex justify-between items-start">
@@ -360,7 +369,10 @@
                             <div id="alert-container-${phase.id}-${step.id}" class="mt-3"></div>
                         </div>
                         <div class="flex items-center space-x-2 text-right">
-                           <span class="text-xs font-semibold px-2 py-1 rounded-full bg-gray-200 text-gray-700">${step.source}</span>
+                           <span class="text-xs font-semibold px-2 py-1 rounded-full bg-gray-200 text-gray-700 flex items-center">
+                                ${step.source}
+                                ${linkIcon}
+                           </span>
                             <div class="tooltip">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info text-gray-400 hover:text-blue-600 cursor-pointer"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                                 <span class="tooltiptext">${step.tooltip}</span>
@@ -476,4 +488,3 @@
 
 </body>
 </html>
-
